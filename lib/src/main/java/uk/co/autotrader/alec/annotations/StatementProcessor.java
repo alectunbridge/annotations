@@ -4,12 +4,24 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class StatementProcessor {
-    public void execute(Object object) throws InvocationTargetException, IllegalAccessException {
+
+    private StatementProcessor() {
+        //this should not get called
+    }
+
+    public static String execute(Object object) {
         Class<?> clazz = object.getClass();
 
         Method evaluate = null;
         Method ifTrue = null;
         Method ifFalse = null;
+
+        if (!clazz.isAnnotationPresent(Conditional.class)) {
+            throw new RuntimeException("The class "
+                                       + clazz.getSimpleName()
+                                       + " is not annotated with Conditional");
+        }
+
         for (Method method : clazz.getDeclaredMethods()) {
             if (method.isAnnotationPresent(Evaluate.class)) {
                 method.setAccessible(true);
@@ -25,10 +37,14 @@ public class StatementProcessor {
             }
         }
 
-        if((boolean) evaluate.invoke(object)){
-            ifTrue.invoke(object);
-        } else {
-            ifFalse.invoke(object);
+        try {
+            if ((boolean) evaluate.invoke(object)) {
+                return (String) ifTrue.invoke(object);
+            } else {
+                return (String) ifFalse.invoke(object);
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
         }
     }
 }
