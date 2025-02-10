@@ -11,7 +11,7 @@ public class BuzzOrFizzOrNumber extends FizzOrNumber {
 
     @Evaluate
     private boolean isBuzz(){
-        return number % 5 == 0;
+        return currentNumber % 5 == 0;
     }
 
     @IfTrue
@@ -20,7 +20,7 @@ public class BuzzOrFizzOrNumber extends FizzOrNumber {
     }
 
     @IfFalse
-    private String ifFalse(){
-        return StatementProcessor.execute(new FizzOrNumber(number));
+    private Object ifFalse(){
+        return new FizzOrNumber(currentNumber);
     }
 }

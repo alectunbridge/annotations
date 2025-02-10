@@ -6,7 +6,7 @@ import uk.co.autotrader.alec.annotations.IfFalse;
 import uk.co.autotrader.alec.annotations.IfTrue;
 
 @Conditional
-public class FizzOrNumber extends FizzBuzzOrNumber{
+public class FizzOrNumber extends FizzBuzzForARangeOfNumbers {
 
     public FizzOrNumber(int number) {
         super(number);
@@ -14,7 +14,7 @@ public class FizzOrNumber extends FizzBuzzOrNumber{
 
     @Evaluate
     private boolean isFizz(){
-        return number % 3 == 0;
+        return currentNumber % 3 == 0;
     }
 
     @IfTrue
@@ -24,6 +24,6 @@ public class FizzOrNumber extends FizzBuzzOrNumber{
 
     @IfFalse
     private String ifFalse(){
-        return Integer.toString(number);
+        return Integer.toString(currentNumber);
     }
 }
